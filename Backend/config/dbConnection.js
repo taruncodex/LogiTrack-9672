@@ -3,6 +3,7 @@ import "dotenv/config";
 
 const DB_URL = process.env.DB_URL;
 
+// Connecting db 
 async function dbConnection() {
     try {
         await connect(DB_URL);

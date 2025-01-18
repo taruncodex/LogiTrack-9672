@@ -1,4 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+
+// User Schema includeing : name , email , password , role ,jobTitle , phone ,
+//department, status, taskList, lastActive, profilepicture, metrics : { tasksCompleted:  averageTaskTime:  productivity: }
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -34,7 +37,8 @@ const userSchema = new mongoose.Schema({
         enum: ['active', 'inactive', 'suspended'],
         default: 'active'
     },
-    totalTasks: { type: Number },
+    
+    taskList: [{ type: Schema.Types.ObjectId, ref: "Task" }],
 
     lastActive: { type: Date, default: null },
     profilePicture: String,
@@ -47,6 +51,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
+// Create the User model 
 const User = new mongoose.model("User", userSchema);
 
 export default User;

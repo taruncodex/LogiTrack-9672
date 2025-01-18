@@ -1,6 +1,6 @@
 // Task Schema
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+
 
 const taskSchema = new mongoose.Schema({
     employeeId: {
@@ -21,6 +21,7 @@ const taskSchema = new mongoose.Schema({
     timeSpent: {
         type: Number,
         required: true,
+        default: 0,
         min: 0
     },
     priority: {
