@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <style>
+      #parent {
+        display: grid;
+        grid-template-columns: 14rem auto;
+        gap: 10px;
+        border: none;
+      }
+      div {
+        border: 1px solid;
+        border-radius: 0.625rem;
+      }
+      a {
+        text-decoration: none;
+        color: black;
+        margin: 5px;
+        border-radius: 10px;
+        padding: 5px;
+        font-size: x-large;
+      }
+      .leftAside {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        height: 100vh;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+          rgba(0, 0, 0, 0.22) 0px 15px 12px;
+      }
+      .leftAside > a:hover {
+        background: rgb(34, 193, 195);
+        background: linear-gradient(
+          0deg,
+          rgba(34, 193, 195, 1) 0%,
+          rgba(253, 45, 242, 1) 100%
+        );
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+          rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+        color: aliceblue;
+        transition: all 0.3s ease-in-out;
+      }
+      .fisrtPart {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 2fr;
+        gap: 0.625rem;
+        grid-template-rows: 200px;
+        margin: 0.625rem;
+        padding: 0.625rem;
+        border: none;
+      }
+      .fisrtPart > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+          rgba(0, 0, 0, 0.22) 0px 15px 12px;
+      }
+      .secondPart {
+        display: grid;
+        grid-template-columns: 1fr 1fr 2fr;
+        grid-template-rows: 300px;
+        gap: 0.625rem;
+        margin: 0.625rem;
+        padding: 0.625rem;
+        border: none;
+      }
+      .secondPart > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+          rgba(0, 0, 0, 0.22) 0px 15px 12px;
+      }
+      .mainSec {
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+          rgba(0, 0, 0, 0.22) 0px 15px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="parent">
+      <div class="leftAside">
+        <a href=""><i class="bi bi-house"></i> Home</a>
+        <a href=""><i class="bi bi-list-task"></i> Task</a>
+        <a href=""><i class="bi bi-person-fill"></i> Profile</a>
+        <a href=""><i class="bi bi-gear"></i> Setting</a>
+      </div>
+      <div class="mainSec">
+        <div class="fisrtPart">
+          <div>Total Task</div>
+          <div>Completed Task</div>
+          <div>Incompleted Task</div>
+          <div><canvas id="gaugeChart"></canvas></div>
+        </div>
+        <div class="secondPart">
+          <!-- <div id="myChart">Bar Graph/Pie Chart</div> -->
+          <div><canvas id="myChart"></canvas></div>
+
+          <div><canvas id="barChart"></canvas></div>
+          <div>Content</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // BAR CHART JS ///////////////////////////////////////////////////
+      const ctx = document.getElementById("myChart").getContext("2d");
+      const myChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green"],
+          datasets: [
+            {
+              label: "Votes",
+              data: [12, 19, 3, 5],
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+      });
+      /////////////////////////////////////////////////////////////////////////
+      // PIE CHART JS
+      const barCtx = document.getElementById("barChart").getContext("2d");
+      new Chart(barCtx, {
+        type: "bar",
+        data: {
+          labels: ["Employee A", "Employee B", "Employee C", "Employee D"],
+          datasets: [
+            {
+              label: "Tasks Completed",
+              data: [12, 15, 8, 20],
+              backgroundColor: ["#4caf50", "#2196f3", "#ffeb3b", "#ff9800"],
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+      /////////////////////////////////////////////////////////////////
+      // GAUGE CHART JS
+      const gaugeCtx = document.getElementById("gaugeChart").getContext("2d");
+      const gaugeData = {
+        datasets: [
+          {
+            data: [60, 40],
+            backgroundColor: ["#ff9800", "#e0e0e0"],
+            borderWidth: 0,
+          },
+        ],
+      };
+      const gaugeOptions = {
+        rotation: -90,
+        circumference: 180,
+        cutout: "80%",
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+        },
+      };
+      new Chart(gaugeCtx, {
+        type: "doughnut",
+        data: gaugeData,
+        options: gaugeOptions,
+      });
+    </script>
+  </body>
+</html>
