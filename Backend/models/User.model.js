@@ -1,5 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 
+// User Schema includeing : name , email , password , role ,jobTitle , phone ,
+//department, status, taskList, lastActive, profilepicture, metrics : { tasksCompleted:  averageTaskTime:  productivity: }
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -34,6 +37,7 @@ const userSchema = new mongoose.Schema({
         enum: ['active', 'inactive', 'suspended'],
         default: 'active'
     },
+    
     taskList: [{ type: Schema.Types.ObjectId, ref: "Task" }],
 
     lastActive: { type: Date, default: null },
@@ -47,6 +51,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
+// Create the User model 
 const User = new mongoose.model("User", userSchema);
 
 export default User;
