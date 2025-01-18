@@ -103,92 +103,92 @@
         <div class="secondPart">
           <!-- <div id="myChart">Bar Graph/Pie Chart</div> -->
           <div><canvas id="myChart"></canvas></div>
-
           <div><canvas id="barChart"></canvas></div>
           <div>Content</div>
         </div>
       </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      // BAR CHART JS ///////////////////////////////////////////////////
-      const ctx = document.getElementById("myChart").getContext("2d");
-      const myChart = new Chart(ctx, {
-        type: "pie",
-        data: {
-          labels: ["Red", "Blue", "Yellow", "Green"],
-          datasets: [
-            {
-              label: "Votes",
-              data: [12, 19, 3, 5],
-              backgroundColor: [
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-              ],
-              borderColor: [
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-              ],
-              borderWidth: 1,
-            },
-          ],
-        },
-      });
-      /////////////////////////////////////////////////////////////////////////
-      // PIE CHART JS
-      const barCtx = document.getElementById("barChart").getContext("2d");
-      new Chart(barCtx, {
-        type: "bar",
-        data: {
-          labels: ["Employee A", "Employee B", "Employee C", "Employee D"],
-          datasets: [
-            {
-              label: "Tasks Completed",
-              data: [12, 15, 8, 20],
-              backgroundColor: ["#4caf50", "#2196f3", "#ffeb3b", "#ff9800"],
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });
-      /////////////////////////////////////////////////////////////////
-      // GAUGE CHART JS
-      const gaugeCtx = document.getElementById("gaugeChart").getContext("2d");
-      const gaugeData = {
-        datasets: [
-          {
-            data: [60, 40],
-            backgroundColor: ["#ff9800", "#e0e0e0"],
-            borderWidth: 0,
-          },
-        ],
-      };
-      const gaugeOptions = {
-        rotation: -90,
-        circumference: 180,
-        cutout: "80%",
-        plugins: {
-          tooltip: {
-            enabled: false,
-          },
-        },
-      };
-      new Chart(gaugeCtx, {
-        type: "doughnut",
-        data: gaugeData,
-        options: gaugeOptions,
-      });
-    </script>
   </body>
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // BAR CHART JS ///////////////////////////////////////////////////
+  const ctx = document.getElementById("myChart").getContext("2d");
+  const myChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["Red", "Blue", "Yellow", "Green"],
+      datasets: [
+        {
+          label: "Votes",
+          data: [16, 19, 3, 5],
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    },
+  });
+  /////////////////////////////////////////////////////////////////////////
+  // PIE CHART JS
+  const barCtx = document.getElementById("barChart").getContext("2d");
+  new Chart(barCtx, {
+    type: "bar",
+    data: {
+      labels: ["Employee A", "Employee B", "Employee C", "Employee D"],
+      datasets: [
+        {
+          label: "Tasks Completed",
+          data: [12, 34, 8, 20],
+          backgroundColor: ["#4caf50", "#2196f3", "#ffeb3b", "#ff9800"],
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+  /////////////////////////////////////////////////////////////////
+  // GAUGE CHART JS
+  const gaugeCtx = document.getElementById("gaugeChart").getContext("2d");
+  const gaugeData = {
+    datasets: [
+      {
+        data: [50, 40],
+        backgroundColor: ["#ff9800", "#e0e0e0"],
+        borderWidth: 0,
+      },
+    ],
+  };
+  const gaugeOptions = {
+    rotation: -90,
+    circumference: 180,
+    cutout: "80%",
+    plugins: {
+      tooltip: {
+        enabled: false,
+      },
+    },
+  };
+  new Chart(gaugeCtx, {
+    type: "doughnut",
+    data: gaugeData,
+    options: gaugeOptions,
+  });
+</script>
