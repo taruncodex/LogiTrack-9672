@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Employee Productivity Tracker</title>
+    <link rel="stylesheet" href="css/styles.css"> <!-- Linking to the styles.css -->
+</head>
+<body>
+
+    <!-- Main content of the webpage -->
+    <header>
+        <h1>Employee Productivity Tracker</h1>
+    </header>
+
+    <nav>
+        <!-- Navigation bar for different sections -->
+        <ul>
+            <li><a href="#employee-view">Employee View</a></li>
+            <li><a href="#employer-dashboard">Employer Dashboard</a></li>
+            <li><a href="#leaderboard">Leaderboard</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Employee View Section -->
+        <section id="employee-view">
+            <h2>Employee View</h2>
+
+            <!-- Task Logging Form -->
+            <form id="task-form">
+                <label for="task-title">Task Title:</label>
+                <input type="text" id="task-title" required>
+
+                <label for="task-description">Description:</label>
+                <textarea id="task-description" required></textarea>
+
+                <label for="task-time">Time Spent (hours):</label>
+                <input type="number" id="task-time" min="0.1" step="0.1" required>
+
+                <label for="task-priority">Priority:</label>
+                <select id="task-priority">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+
+                <label for="task-category">Category:</label>
+                <select id="task-category">
+                    <option value="BAU">BAU</option>
+                    <option value="Ad Hoc">Ad Hoc</option>
+                    <option value="Project-Based">Project-Based</option>
+                </select>
+
+                <button type="submit">Log Task</button>
+            </form>
+
+            <!-- Task Log (where tasks will be displayed) -->
+            <div id="task-log"></div>
+        </section>
+
+        <!-- Employer Dashboard Section -->
+        <section id="employer-dashboard">
+            <h2>Employer Dashboard</h2>
+            <div id="productivity-insights"></div>
+        </section>
+
+        <!-- Leaderboard Section -->
+        <section id="leaderboard">
+            <h2>Leaderboard</h2>
+            <div id="leaderboard-list"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Employee Productivity Tracker</p>
+    </footer>
+
+    <script src="js/main.js"></script> <!-- Linking to the main.js -->
+    <script src="js/leaderboard.js"></script> <!-- Linking to the leaderboard.js -->
+</body>
+</html>
