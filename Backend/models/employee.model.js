@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
         enum: ['active', 'inactive', 'suspended'],
         default: 'active'
     },
-    totalTasks: { type: Number },
+    taskList: [{ type: Schema.Types.ObjectId, ref: "Task" }],
 
     lastActive: { type: Date, default: null },
     profilePicture: String,

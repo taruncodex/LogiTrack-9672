@@ -5,6 +5,7 @@ import argon2 from "argon2";
 import "dotenv/config";
 
 
+
 const generateOtp = () => Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
 
 
@@ -22,13 +23,13 @@ const transporter = nodemailer.createTransport({
 export const signUpUser = async (req, res) => {
     try {
 
-        const { email, name, password, department, role } = req.body;
+        const { email, name, password, department } = req.body;
 
-        if (!email || !name || !password || !department || !role) {
+        if (!email || !name || !password) {
             return res.status(400).json({ msg: "email , name and password are required." })
         }
 
-        console.log(email, name, password, department, role);
+        console.log(email, name, password, department);
 
         const chechUser = await User.findOne({ email });
 
@@ -44,7 +45,6 @@ export const signUpUser = async (req, res) => {
             email,
             password: hashPassword,
             department,
-            role
         });
 
         await user.save();
@@ -88,7 +88,7 @@ export const loginUser = async (req, res) => {
 
         // Creating accesToken
         const accessToken = jwt.sign(
-            { id: user._id, name: user.name },
+            { id: user._id, name: user.name, role: user.role },
             process.env.JWT_ACCESS_PASS,
             { expiresIn: "1h" }
         );
@@ -119,8 +119,10 @@ export const loginUser = async (req, res) => {
         console.log(accessToken);
         console.log(req.cookies.accessToken);
         console.log(refreshToken);
+        console.log(user.role);
 
-        res.status(200).json({ message: "login successful" });
+        // Send role of the user with success message. 
+        res.status(200).json({ message: "login successful", role: user.role });
 
     } catch (error) {
         console.log(error.message);
@@ -210,7 +212,8 @@ export const checkForToken = async (req, res, next) => {
     console.log("Enterd in tokenVarification.");
 
     const accessToken = req.cookies.accessToken;
-    console.log(accessToken);
+    console.log("Request headers:", req.headers);
+    console.log("All cookies:", accessToken);
 
     if (accessToken) {
         try {
@@ -225,7 +228,7 @@ export const checkForToken = async (req, res, next) => {
 
         } catch (error) {
             console.log("invalid access token");
-            res.status(401).json({ message: "Unauthorized Access" });
+            res.status(401).json({ message: "Unauthorized Access", error: error.message });
         }
     } else {
         console.log("In the else Part")
@@ -263,7 +266,7 @@ export const checkForToken = async (req, res, next) => {
 
         } catch (error) {
             console.log("invalid refresh token");
-            res.status(401).json({ message: "Unauthorized Access" });
+            res.status(401).json({ message: "Unauthorized Access", error: error.message });
         }
     }
 

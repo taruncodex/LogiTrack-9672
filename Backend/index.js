@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 
-// Sign-Up Route 
+// Sign-Up Route for employer. 
 app.post("/signUp", signUpUser);
 // Login Route
 app.post("/login", loginUser);
