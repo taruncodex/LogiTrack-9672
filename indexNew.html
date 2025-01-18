@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playwrite+IN:wght@100..400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: "Comic Sans MS";
+      }
+      a {
+        text-decoration: none;
+        color: black;
+        font-size: larger;
+        border: 1px solid transparent;
+        padding: 5px;
+        border-radius: 10px;
+
+        transition: all 0.5s ease-in-out;
+      }
+      a:hover {
+        background-color: aqua;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        border: 1px solid;
+      }
+      #header {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background: rgb(34, 193, 195);
+        background: linear-gradient(
+          0deg,
+          rgba(34, 193, 195, 1) 0%,
+          rgba(253, 187, 45, 1) 100%
+        );
+      }
+      .links {
+        display: flex;
+        gap: 20px;
+      }
+      .mainForm {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: rgb(238, 174, 202);
+        background: radial-gradient(
+          circle,
+          rgba(238, 174, 202, 1) 0%,
+          rgba(148, 187, 233, 1) 100%
+        );
+        padding: 20px;
+        border-radius: 10px;
+      }
+      #mainS {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;
+      }
+      #mainFS {
+        border-radius: 10px;
+        background-color: aqua;
+        cursor: pointer;
+        padding: 5px;
+      }
+      #mainFS:hover {
+        background-color: aliceblue;
+        transition: all 0.5s ease-in-out;
+      }
+      input {
+        border-radius: 10px;
+        padding: 5px;
+      }
+      textarea {
+        border-radius: 10px;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>TaskVista</h1>
+      <div class="links">
+        <a href="">Dashboard</a>
+        <a href="">Tasks</a>
+        <a href="">Profile</a>
+        <a href="">Log Out</a>
+      </div>
+    </div>
+    <div id="mainS">
+      <form action="" class="mainForm">
+        <h1>Task Logging Form</h1>
+        <input type="text" placeholder="Task Title" />
+        <textarea name="" id="" placeholder="Description"></textarea>
+        <label for="timeSpend">Time Spend:</label>
+        <input type="time" step="1" placeholder="Time Spend" id="timeSpend" />
+        <label for="priority">Priority:</label>
+        <select name="" id="priority">
+          <option value="">LOW</option>
+          <option value="">MEDIUM</option>
+          <option value="">HIGH</option>
+        </select>
+        <fieldset>
+          <legend>Task Category:</legend>
+          <label>
+            <input type="radio" name="taskCategory" value="BAU" /> BAU (Business
+            as Usual) </label
+          ><br />
+          <label>
+            <input type="radio" name="taskCategory" value="AdHoc" /> Ad Hoc </label
+          ><br />
+          <label>
+            <input type="radio" name="taskCategory" value="ProjectBased" />
+            Project-Based
+          </label>
+        </fieldset>
+        <textarea name="" id="" placeholder="Reference"></textarea>
+        <input type="file" />
+        <button type="submit" id="mainFS">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
