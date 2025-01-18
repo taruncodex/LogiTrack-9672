@@ -7,6 +7,7 @@ import { dbConnection } from "./config/dbConnection.js";
 import morgan from "morgan";
 import employeeRouter from "./routers/employee.router.js";
 import employerRouter from "./routers/employer.router.js";
+import { checkForToken, forgotPassword, loginUser, resetPassword, signUpUser } from "./controllers/auth.controller.js";
 
 const app = express();
 
@@ -19,8 +20,23 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use("/tasks", employeeRouter);
-app.use("/employer", employerRouter);
+
+// Sign-Up Route 
+app.post("/signUp", signUpUser);
+// Login Route
+app.post("/login", loginUser);
+// forget password
+app.post("/forgot-password", forgotPassword);
+// reset password
+app.post("/reset-password", resetPassword)
+
+
+
+// if the user is employee send to /employee route  
+app.use("/employee", checkForToken, employeeRouter);
+// if user is employer then send him to /employer route
+app.use("/employer", checkForToken, employerRouter);
+
 
 
 

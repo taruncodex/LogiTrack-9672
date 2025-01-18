@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -23,7 +22,7 @@ const userSchema = new mongoose.Schema({
         enum: ['employee', 'employer'],
         required: true
     },
-    jobTitle : String,
+    jobTitle: String,
     phone: Number,
     department: {
         type: String,
@@ -50,4 +49,41 @@ const userSchema = new mongoose.Schema({
 
 const User = new mongoose.model("User", userSchema);
 
-export default User; 
+export default User;
+
+
+
+
+// // Department Schema
+// const departmentSchema = {
+//     name: String,
+//     description: String,
+//     managerId: ObjectId,  // reference to employer user
+//     createdAt: Date,
+//     updatedAt: Date
+// }
+
+// Performance Metrics Schema
+// const performanceMetricsSchema = {
+//     userId: ObjectId,
+//     period: {
+//         startDate: Date,
+//         endDate: Date
+//     },
+//     metrics: {
+//         tasksCompleted: Number,
+//         totalTimeSpent: Number,
+//         tasksByCategory: {
+//             BAU: Number,
+//             AdHoc: Number,
+//             Project: Number
+//         },
+//         tasksByPriority: {
+//             Low: Number,
+//             Medium: Number,
+//             High: Number
+//         },
+//         averageTaskCompletionTime: Number
+//     },
+//     createdAt: Date
+// }
