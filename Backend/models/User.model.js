@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
         enum: ['active', 'inactive', 'suspended'],
         default: 'active'
     },
-    
+
     taskList: [{ type: Schema.Types.ObjectId, ref: "Task" }],
 
     lastActive: { type: Date, default: null },

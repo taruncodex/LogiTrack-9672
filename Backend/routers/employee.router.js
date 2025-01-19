@@ -15,7 +15,7 @@ const checkRole = (req, res, next) => {
 
 // employeeRouter.use(checkRole());
 
-// Routes 
+// Get Route to send the employee dashboard. 
 employeeRouter.get("/", checkRole, async (req, res) => {
     try {
         const user = req.user;

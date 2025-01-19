@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./assests/css/employeeDash.css" />
+  </head>
+  <body>
+    <div class="mx-auto">
+      <button
+        id="prev"
+        class="text-black px-4 py-2 mx-9 radious-29"
+        onclick="changePage('prev')"
+      >
+        Prev
+      </button>
+      <button
+        id="next"
+        class="text-black px-4 py-2 mx-9 radious-29"
+        onclick="changePage('next')"
+      >
+        next
+      </button>
+    </div>
+
+    <div id="job-details"></div>
+  </body>
+</html>
+
+<script src="job.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+  crossorigin="anonymous"
+></script>
+
+<script>
+  let limit = 15;
+  let page = 1;
+
+  // function for fetxhing the api
+  function fetchingApi() {
+    fetch(
+      `https://672de52dfd89797156442dcf.mockapi.io/jobss?page=${page}&limit=${limit}`
+    )
+      .then((res) => res.json())
+      .then((data) => displayCard(data));
+    // .json() is also promise so you have to handle it as well .
+  }
+
+  // trying to access the user's choice on the sort type.  we can use onchaange inside html directly as well.
+  fetchingApi();
+
+  // function to display the fetched data into the cards
+  function displayCard(data) {
+    console.log(" sdd" + data);
+    let container = document.querySelector("#job-details");
+    container.innerHTML = ""; // making container empty initially.
+    data.forEach((ele) => {
+      let date = ele.createdAt;
+      container.innerHTML += `
+        <div class="job-card">
+          <div class="date">${date}</div>
+          <div class="job-content">
+            <h2>${ele.company_name}</h2>
+            <p>${ele.job_description}</p>
+            <p>${ele.job}</p>
+            <div class="job-tags">
+              <span>${ele.fullTime ? "Full Time" : "Part Time"}</span>
+              <span>${ele.country}</span>
+              <span>Openings:${ele.openings}</span>
+            </div>
+          </div>
+          <div class="job-footer">
+            <p>$${ele.salary}/hr</p>
+            <a href="jobDetail.html?id=${ele.id}" >details</a>
+          </div>
+        </div>`;
+    });
+  }
+
+  // function for pagination
+  function changePage(val) {
+    if (val == "prev" && page > 1) {
+      page--;
+    } else if (val === "next") {
+      page++;
+    }
+    fetchingApi();
+  }
+
+  // <--- Performing Sorting  --->
+
+  // adding eventListner
+
+  // let sort = document.getElementById("sorting");
+  // sort.addEventListener("change" , sortBySalary);
+
+  //  function sortBySalary(){
+  //     let data = jobData;
+  //     if(sort.value == "asc"){
+  //         // sort logic for ascending
+  //         data.sort((a,b)=> a.salary - b.salary);
+  //         displayCard(data);
+  //     }
+  //     else if (sort.value == "desc"){
+  //          // sort logic for Descending
+  //          data.sort((a,b)=>  b.salary - a.salary);
+  //          displayCard(data);
+  //     }
+  //  }
+</script>

@@ -1,9 +1,16 @@
 import express from "express";
 import { addEmployee, dashboard } from "../controllers/employer.controller.js";
 import { checkForToken } from "../controllers/auth.controller.js";
-
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const employerRouter = express.Router();
+
+
+// Resolve __dirname in ES6 modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 // Middleware for checking the role of the user
 const checkRole = (req, res) => {
@@ -18,8 +25,8 @@ const checkRole = (req, res) => {
 
 employerRouter.get("/", checkForToken, checkRole, async (req, res) => {
     try {
-        const user = req.user;
-        return res.status(200).json({ user })
+
+        return res.sendFile(__dirname, "public", "employerDashboard.html");
     } catch (error) {
         return res.status(500).json({ msg: "Internal server error", error: error.message });
     }

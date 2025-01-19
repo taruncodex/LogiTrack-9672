@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* ... keeping your existing styles ... */
+      body {
+        margin: 0;
+        background: linear-gradient(-45deg, #0066ff, #87ceeb, #f526c5);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        70% {
+          background-position: 0% 50%;
+        }
+      }
+
+      #loginForm {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid;
+        padding: 10px;
+        border-radius: 10px;
+        background: rgb(34, 193, 195);
+        background: linear-gradient(
+          0deg,
+          rgba(34, 193, 195, 1) 0%,
+          rgb(195, 67, 223) 100%
+        );
+        width: 25%;
+      }
+
+      form > input {
+        border-radius: 10px;
+        border: 2px solid gray;
+        padding: 10px;
+        width: 90%;
+      }
+
+      #loginBtn,
+      .modal-btn {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+          rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+          rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 10px;
+      }
+
+      #loginBtn:hover,
+      .modal-btn:hover {
+        background-color: aqua;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .forgot-password {
+        color: white;
+        text-decoration: none;
+        font-size: 0.9em;
+        margin-top: -5px;
+      }
+
+      .forgot-password:hover {
+        text-decoration: underline;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: linear-gradient(
+          0deg,
+          rgba(34, 193, 195, 1) 0%,
+          rgb(195, 67, 223) 100%
+        );
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid grey;
+        min-height: 250px;
+        min-width: 300px;
+        text-align: center;
+      }
+
+      .modal-content h2 {
+        color: white;
+        margin-bottom: 20px;
+      }
+
+      #resetForm,
+      #otpForm {
+        display: flex;
+        width: 90%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        background: rgb(34, 193, 195);
+        background: linear-gradient(
+          0deg,
+          rgba(34, 193, 195, 1) 0%,
+          rgb(195, 67, 223) 100%
+        );
+      }
+
+      .modal-content input {
+        width: 90%;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        padding: 10px;
+        border: 2px solid gray;
+      }
+
+      .modal-btns {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        width: fit-content;
+      }
+
+      /* New styles for OTP step */
+      #otpStep,
+      #emailStep {
+        width: 100%;
+      }
+
+      #otpStep {
+        display: none;
+      }
+
+      .message {
+        color: white;
+        margin: 10px 0;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loginForm">
+      <form action="submit" class="login">
+        <h1 style="color: white">Log In</h1>
+        <input id="email" type="email" placeholder="Email" />
+        <input id="password" type="password" placeholder="Password" />
+        <a href="#" class="forgot-password">Forgot Password?</a>
+        <button type="submit" id="loginBtn">Submit</button>
+      </form>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+      <div class="modal-content">
+        <div id="emailStep">
+          <h2>Reset Password</h2>
+          <form id="resetForm">
+            <input
+              type="email"
+              id="resetEmail"
+              placeholder="Enter your email"
+              required
+            />
+            <div class="modal-btns">
+              <button type="button" class="modal-btn" onclick="closeModal()">
+                Cancel
+              </button>
+              <button type="submit" class="modal-btn">Submit</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="otpStep">
+          <h2>Verify OTP</h2>
+          <p class="message">Please enter the OTP sent to your email</p>
+          <form id="otpForm">
+            <input type="text" id="otpInput" placeholder="Enter OTP" required />
+            <p class="message">OTP is valid for 5 minutes</p>
+            <div class="modal-btns">
+              <button type="button" class="modal-btn" onclick="closeModal()">
+                Cancel
+              </button>
+              <button type="submit" class="modal-btn">Verify</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="newPasswordStep" style="display: none">
+          <h2>Set New Password</h2>
+          <form id="newPasswordForm">
+            <input
+              type="password"
+              id="newPassword"
+              placeholder="Enter new password"
+              required
+            />
+            <div class="modal-btns">
+              <button type="button" class="modal-btn" onclick="closeModal()">
+                Cancel
+              </button>
+              <button type="submit" class="modal-btn">Update Password</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      const modal = document.getElementById("forgotPasswordModal");
+      const forgotPasswordLink = document.querySelector(".forgot-password");
+      const resetForm = document.getElementById("resetForm");
+      const otpForm = document.getElementById("otpForm");
+      const newPasswordForm = document.getElementById("newPasswordForm");
+      const emailStep = document.getElementById("emailStep");
+      const otpStep = document.getElementById("otpStep");
+      const newPasswordStep = document.getElementById("newPasswordStep");
+
+      let savedOTP = ""; // Store the OTP received from the server
+
+      forgotPasswordLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.style.display = "flex";
+        emailStep.style.display = "block";
+        otpStep.style.display = "none";
+        newPasswordStep.style.display = "none";
+      });
+
+      function closeModal() {
+        modal.style.display = "none";
+        emailStep.style.display = "block";
+        otpStep.style.display = "none";
+        newPasswordStep.style.display = "none";
+        resetForm.reset();
+        otpForm.reset();
+        newPasswordForm.reset();
+      }
+
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Handle email submission for password reset
+      resetForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("resetEmail").value;
+
+        try {
+          const response = await fetch("/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+            credentials: "include", // Important for cookie handling
+          });
+
+          const data = await response.json();
+          console.log(data);
+
+          if (response.ok) {
+            savedOTP = data.OTP; // Save OTP from response
+            emailStep.style.display = "none";
+            otpStep.style.display = "block";
+          } else {
+            alert(data.message || "Error sending OTP");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred. Please try again later.");
+        }
+      });
+
+      // Handle OTP verification
+      otpForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const enteredOTP = document.getElementById("otpInput").value;
+        console.log(enteredOTP, typeof enteredOTP);
+        console.log(savedOTP, typeof savedOTP);
+
+        if (enteredOTP == savedOTP) {
+          // Show new password form if OTP matches
+          otpStep.style.display = "none";
+          newPasswordStep.style.display = "block";
+        } else {
+          alert("Invalid OTP. Please try again.");
+        }
+      });
+
+      // Handle new password submission
+      newPasswordForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const password = document.getElementById("newPassword").value;
+
+        try {
+          const response = await fetch("/reset-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password }),
+            credentials: "include", // Important for cookie handling
+          });
+
+          const data = await response.json();
+          console.log(data);
+          if (response.ok) {
+            alert(data.message || "Password updated successfully");
+            closeModal();
+          } else {
+            alert(data.message || "Error updating password");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred. Please try again later.");
+        }
+      });
+
+      // Original login form handler
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+          const response = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            if (data.role === "employer") {
+              window.location.href = "/employer";
+            } else if (data.role === "employee") {
+              window.location.href = "/employee";
+            }
+          } else {
+            alert(data.error);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred. Please try again later.");
+        }
+      });
+    </script>
+  </body>
+</html>

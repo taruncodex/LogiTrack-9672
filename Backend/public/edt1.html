@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Dashboard</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      .dashboard {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .profile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .profile img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+
+      section {
+        margin-bottom: 30px;
+      }
+
+      #tasksContainer div {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+
+      button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="dashboard">
+      <header>
+        <h1>Employee Dashboard</h1>
+        <div class="profile">
+          <img id="profilePic" src="" alt="Profile Picture" />
+          <h2 id="employeeName"></h2>
+          <p id="employeeEmail"></p>
+        </div>
+      </header>
+
+      <section>
+        <h2>Task List</h2>
+        <div id="tasksContainer"></div>
+      </section>
+
+      <section>
+        <h2>Add Task</h2>
+        <form id="taskForm">
+          <input type="text" id="title" placeholder="Task Title" required />
+          <textarea id="description" placeholder="Task Description"></textarea>
+          <input type="date" id="date" required />
+          <select id="status">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <input
+            type="number"
+            id="timeSpent"
+            placeholder="Time Spent (hours)"
+          />
+          <button type="submit">Add Task</button>
+        </form>
+      </section>
+    </div>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
+
+<script>
+
+const taskForm = document.getElementById('taskForm');
+const tasksContainer = document.getElementById('tasksContainer');
+const profilePic = document.getElementById('profilePic');
+const employeeName = document.getElementById('employeeName');
+const employeeEmail = document.getElementById('employeeEmail');
+
+// Fetch Employee Profile
+const fetchProfile = async () => {
+    try {
+        const response = await fetch('/profile', { credentials: 'include' });
+        const profile = await response.json();
+
+        profilePic.src = profile.profilePicture || 'default-profile.png';
+        employeeName.textContent = profile.name;
+        employeeEmail.textContent = profile.email;
+    } catch (error) {
+        console.error('Failed to load profile:', error);
+    }
+};
+
+// Fetch Tasks
+const fetchTasks = async () => {
+    try {
+        const response = await fetch('/tasks', { credentials: 'include' });
+        const tasks = await response.json();
+
+        tasksContainer.innerHTML = tasks
+            .map(
+                (task) => `
+            <div>
+                <h3>${task.title}</h3>
+                <p>${task.description}</p>
+                <p>Status: ${task.status}</p>
+                <p>Time Spent: ${task.time_spent} hrs</p>
+                <button onclick="deleteTask('${task._id}')">Delete</button>
+                <button onclick="editTask('${task._id}')">Edit</button>
+            </div>
+            `
+            )
+            .join('');
+    } catch (error) {
+        console.error('Failed to load tasks:', error);
+    }
+};
+
+// Add Task
+taskForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
+    const date = document.getElementById('date').value;
+    const status = document.getElementById('status').value;
+    const timeSpent = document.getElementById('timeSpent').value;
+
+    try {
+        await fetch('/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ title, description, date, status, time_spent: timeSpent }),
+        });
+
+        fetchTasks();
+        taskForm.reset();
+    } catch (error) {
+        console.error('Failed to add task:', error);
+    }
+});
+
+// Delete Task
+const deleteTask = async (taskId) => {
+    try {
+        await fetch(`/tasks/${taskId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        fetchTasks();
+    } catch (error) {
+        console.error('Failed to delete task:', error);
+    }
+};
+
+// Edit Task (simplified for demonstration)
+const editTask = (taskId) => {
+    alert(`Edit functionality for task ID: ${taskId} can be implemented.`);
+};
+
+// Initial Fetch
+fetchProfile();
+fetchTasks();
+
+
+</script>

@@ -50,15 +50,52 @@
   </head>
   <body>
     <div id="signUpForm">
-      <form action="" class="sign">
+      <form action="submit" id="signup" class="sign">
         <h1 style="color: white">Sign Up</h1>
-        <input type="text" placeholder="User Name" />
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-        <input type="text" placeholder="Department" />
-        <input type="text" placeholder="Job title" />
+        <input id="userName" type="text" placeholder="User Name" />
+        <input id="email" type="email" placeholder="Email" />
+        <input id="password" type="password" placeholder="Password" />
+        <input id="department" type="text" placeholder="Department" />
+        <input id="jobTitle" type="text" placeholder="Job title" />
         <button type="submit" id="signBtn">Submit</button>
       </form>
     </div>
   </body>
 </html>
+
+<script>
+  const form = document.getElementById("signup");
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Get the email and password value entered by the user
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const name = document.getElementById("userName").value;
+    const department = document.getElementById("department").value;
+    console.log(email, password, name, department);
+
+    try {
+      const response = await fetch("/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          userName,
+          department,
+          jobTitle,
+        }),
+      });
+
+      // getting the response
+      const data = await response.json();
+
+      if (response.ok) {
+        window.location.href = "/employer";
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
+</script>
