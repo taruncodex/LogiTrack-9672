@@ -36,7 +36,7 @@ const taskSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'inProgress', 'completed'],
+        enum: ['Pending', 'In Progress', 'Completed'],
         default: 'pending'
     },
     reference: {
@@ -49,22 +49,6 @@ const taskSchema = new mongoose.Schema({
         url: String,
         uploadedAt: Date
     }],
-    // comments: [{
-    //     userId: {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'User'
-    //     },
-    //     content: String,
-    //     createdAt: {
-    //         type: Date,
-    //         default: Date.now
-    //     }
-    // }],
-    // efficiency: {
-    //     type: Number,
-    //     min: 0,
-    //     max: 100
-    // }
 }, {
     timestamps: true
 });

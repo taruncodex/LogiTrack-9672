@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Details</title>
+  </head>
+  <body>
+    <div id="job-details"></div>
+  </body>
+</html>
+<script>
+  // console.log(window.location.href)  :- to get the whole api url
+  // URLSearchParam is used to get the data from the current url.
+  let url = new URLSearchParams(window.location.search);
+  let jobId = url.get("id");
+  console.log(jobId);
+
+
+  function displayCard(data) {
+    console.log(data);
+    // using destructuring to store api's object data into the given variables.
+    let {
+      createdAt,
+      TaskTitle,
+      job,
+      fullTime,
+      country,
+      salary,
+      openings,
+      job_description,
+    } = data;
+    document.querySelector("#job-details").innerHTML = `
+    <div class="job-card">
+      <div class="date">${createdAt}</div>
+        <div class="job-content">
+          <h2>${company_name}</h2>
+          <p>${job_description}</p>
+          <p>${job}</p>
+          <div class="job-tags">
+            <span>${fullTime ? "Full Time" : "Part Time"}</span>
+            <span>${country}</span>
+            <span>Openings:${openings}</span>
+          </div>
+      </div>
+    <div class="job-footer">
+        <p>$${salary}/hr</p>
+    </div>
+  </div>`;
+  }
+</script>

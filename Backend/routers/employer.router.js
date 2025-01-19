@@ -25,7 +25,6 @@ const checkRole = (req, res) => {
 
 employerRouter.get("/", checkForToken, checkRole, async (req, res) => {
     try {
-
         return res.sendFile(__dirname, "public", "employerDashboard.html");
     } catch (error) {
         return res.status(500).json({ msg: "Internal server error", error: error.message });

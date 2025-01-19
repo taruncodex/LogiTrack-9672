@@ -11,8 +11,137 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./assests/css/employeeDash.css" />
+    <style>
+      #navbar {
+        display: flex;
+        background-color: rgb(0, 0, 0);
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.625rem;
+      }
+      .logo {
+        color: white;
+        font-size: x-large;
+        font-weight: bold;
+      }
+      .link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.625rem;
+      }
+      .link > a {
+        text-decoration: none;
+        color: white;
+      }
+      /* .link > a:hover {
+        color: teal;
+        border: 1px solid teal;
+        padding: 0.375rem;
+        border-radius: 10px;
+        box-shadow: teal;
+        transition: all 0.2s ease-in-out;
+      } */
+      .link > button {
+        padding: 0.625rem;
+        border-radius: 0.625rem;
+      }
+      .link > p {
+        color: white;
+        padding: 5px;
+      }
+      .link > button:hover {
+        background-color: teal;
+        box-shadow: teal;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+      }
+
+      #addTask {
+        background-color: rgba(255, 255, 255, 0.822);
+        padding: 20px 5px;
+      }
+      #taskForm {
+        display: flex;
+        justify-content: space-evenly;
+        height: 50px;
+      }
+
+      .btn {
+        padding: 5px 20px;
+        position: relative;
+        bottom: 15px;
+        background-color: teal;
+        color: white;
+        cursor: pointer;
+        border-radius: 10px;
+      }
+    </style>
   </head>
   <body>
+    <!-- NavBar  -->
+    <div id="navbar">
+      <!-- For Employee Name -->
+      <div class="logo"></div>
+      <div class="link">
+        <!-- <a href="">LINK</a>
+        <a href="">LINK</a> -->
+        <a href="" id="alltasks">Total tasks: </a>
+
+        <button id="linkBtn">BUTTON</button>
+      </div>
+    </div>
+
+    <!-- Add Task Section -->
+
+    <section id="addTask">
+      <form action="submit" id="taskForm">
+        <h3>Add a Task</h3>
+        <div>
+          <input type="text" id="title" placeholder="Task Title" required />
+        </div>
+        <div>
+          <textarea id="description" placeholder="Task Description"></textarea>
+        </div>
+        <div><input type="date" id="date" required /></div>
+
+        <div>
+          <select id="status">
+            <option value="">Status</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+
+        <div>
+          <select id="priority">
+            <option value="">Priority</option>
+            <option value="high">high</option>
+            <option value="medium">medium</option>
+            <option value="low">low</option>
+          </select>
+        </div>
+
+        <div>
+          <select id="category">
+            <option value="">Category</option>
+            <option value="BAU">BAU</option>
+            <option value="Adhoc">Adhoc</option>
+            <option value="Project">Project</option>
+          </select>
+        </div>
+
+        <div id="btn">
+          <button type="submit" class="btn">Add</button>
+        </div>
+      </form>
+    </section>
+
+    <hr />
+
+    <!-- Pagination Buttons -->
+
     <div class="mx-auto">
       <button
         id="prev"
@@ -30,57 +159,98 @@
       </button>
     </div>
 
-    <div id="job-details"></div>
+    <!-- dYNAMIC DATA OF TASK  -->
+    <div id="taskList"></div>
   </body>
 </html>
 
-<script src="job.js"></script>
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-  crossorigin="anonymous"
-></script>
-
 <script>
-  let limit = 15;
-  let page = 1;
+  const navbarName = document.querySelector(".logo"); // Employee name in navbar
+  const totalTasksLink = document.getElementById("alltasks"); // Total tasks link
+  const taskListContainer = document.getElementById("taskList"); // Task list container
+  const taskForm = document.getElementById("taskForm");
 
-  // function for fetxhing the api
-  function fetchingApi() {
-    fetch(
-      `https://672de52dfd89797156442dcf.mockapi.io/jobss?page=${page}&limit=${limit}`
-    )
-      .then((res) => res.json())
-      .then((data) => displayCard(data));
-    // .json() is also promise so you have to handle it as well .
-  }
+  console.log("I am in script section");
 
-  // trying to access the user's choice on the sort type.  we can use onchaange inside html directly as well.
-  fetchingApi();
+  // Fetch Employee Data from "/employee" endpoint
+  const fetchEmployeeData = async () => {
+    try {
+      console.log("Entered in  fetchEmpployeeData");
+      const response = await fetch("http://localhost:3000/employee/task", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      const { data } = await response.json();
+      console.log(data);
+      console.log("name", data.name);
+      // Update Navbar
+      navbarName.textContent = data.name || "Employee Name";
+
+      totalTasksLink.textContent = `Total tasks: ${data.taskList.length}`;
+
+      // Render Task List
+      console.log(data.taskList);
+      const allTasks = data.taskList;
+      displayCard(allTasks);
+    } catch (error) {
+      console.error("Error fetching employee data:", error);
+    }
+  };
+
+  fetchEmployeeData();
+
+  // Render Task List in Card Format
+  const renderTaskList = (tasks) => {
+    if (!tasks.length) {
+      taskListContainer.innerHTML = "<p>No tasks available.</p>";
+      return;
+    }
+
+    taskListContainer.innerHTML += tasks
+      .map(
+        (task) => `
+        <div class="task-card">
+            <h4>${task.title}</h4>
+            <p>${task.description}</p>
+            <p>Status: <strong>${task.status}</strong></p>
+            <p>Due Date: ${new Date(task.date).toLocaleDateString()}</p>
+            <p>Time Spent: ${task.time_spent || 0} hrs</p>
+            <button class="btn" onclick="deleteTask('${
+              task._id
+            }')">Delete</button>
+            <button class="btn" onclick="editTask('${task._id}')">Edit</button>
+        </div>
+        `
+      )
+      .join("");
+  };
 
   // function to display the fetched data into the cards
   function displayCard(data) {
-    console.log(" sdd" + data);
-    let container = document.querySelector("#job-details");
-    container.innerHTML = ""; // making container empty initially.
+    console.log("I am in the displayCard Section. ");
+    console.log(data);
+
+    taskListContainer.innerHTML = ""; // making container empty initially.
     data.forEach((ele) => {
-      let date = ele.createdAt;
-      container.innerHTML += `
+      let date = ele.createdAt.split("T");
+      console.log(date);
+      taskListContainer.innerHTML += `
         <div class="job-card">
-          <div class="date">${date}</div>
+          <div class="date">Date: ${date[0]}</div>
           <div class="job-content">
-            <h2>${ele.company_name}</h2>
-            <p>${ele.job_description}</p>
-            <p>${ele.job}</p>
+            <h2>${ele.title}</h2>
+            <p>${ele.description}</p>
             <div class="job-tags">
-              <span>${ele.fullTime ? "Full Time" : "Part Time"}</span>
-              <span>${ele.country}</span>
-              <span>Openings:${ele.openings}</span>
+              <span> Priority:  ${ele.priority}</span>
+              <span> Category : ${ele.category}</span>
+              <span> TimeSpent :${ele.timeSpent}</span>
             </div>
           </div>
           <div class="job-footer">
-            <p>$${ele.salary}/hr</p>
-            <a href="jobDetail.html?id=${ele.id}" >details</a>
+            <p>${ele.status}</p>
+            <a href="taskDetail.html?id=${ele.id}" >details</a>
           </div>
         </div>`;
     });
@@ -96,24 +266,36 @@
     fetchingApi();
   }
 
-  // <--- Performing Sorting  --->
+  taskForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  // adding eventListner
+    const title = document.getElementById("title").value;
+    const description = document.getElementById("description").value;
+    const date = document.getElementById("date").value;
+    const status = document.getElementById("status").value;
+    const priority = document.getElementById("priority").value;
+    const category = document.getElementById("category").value;
 
-  // let sort = document.getElementById("sorting");
-  // sort.addEventListener("change" , sortBySalary);
+    try {
+      await fetch("http://localhost:3000/employee/task", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          title,
+          description,
+          date,
+          status,
+          priority,
+          category,
+        }),
+      });
 
-  //  function sortBySalary(){
-  //     let data = jobData;
-  //     if(sort.value == "asc"){
-  //         // sort logic for ascending
-  //         data.sort((a,b)=> a.salary - b.salary);
-  //         displayCard(data);
-  //     }
-  //     else if (sort.value == "desc"){
-  //          // sort logic for Descending
-  //          data.sort((a,b)=>  b.salary - a.salary);
-  //          displayCard(data);
-  //     }
-  //  }
+      console.log("after post");
+      taskForm.reset();
+      fetchEmployeeData(); // Refresh tasks
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
+  });
 </script>

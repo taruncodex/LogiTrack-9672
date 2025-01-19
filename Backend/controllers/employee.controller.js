@@ -1,12 +1,15 @@
 import Task from "../models/task.model.js";
-
+import User from "../models/User.model.js";
 
 export const addTask = async (req, res) => {
     try {
         // Step-1 : take details from the body {}
         // Step-2 : take employee id from the token 
 
-        const { title, description, priority, category, date, status, time_spent } = req.body;
+        console.log("Entered in the addTask");
+
+        const { title, description, priority, category, date, status } = req.body;
+        console.log({ title, description, priority, category, date, status })
 
         if (!title || !description || !date || !status) {
             return res.status(400).json({ msg: "title, description, date  and status are required." })
@@ -22,8 +25,8 @@ export const addTask = async (req, res) => {
             status,
         });
 
+        console.log("new task created");
         const user = req.user;
-        console.log(user);
 
         user.taskList.push(newTask._id.toString());
         await user.save();
@@ -32,13 +35,24 @@ export const addTask = async (req, res) => {
 
         return res.status(201).json({ msg: "Task is created Successfully", newTask });
     } catch (error) {
+        console.log(error.message)
         return res.status(500).json({ msg: "Internal server error", error: error.message });
     }
 }
 
-export const employeeDashboard = async (req, res) => {
+export const getTasks = async (req, res) => {
     try {
 
+        // Fetch the user and populate the taskList
+        const user = await User.findById(req.user._id).populate("taskList");
+
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        console.log("User with tasks populated:", user);
+
+        return res.status(200).json({ data: user });
     } catch (error) {
         return res.status(500).json({ msg: "Internal server error", error: error.message });
     }
